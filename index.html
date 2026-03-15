@@ -786,15 +786,16 @@
             restoreData({
                 senderName: "Max Mustermann", senderStreet: "Musterstraße 123", senderCity: "10115 Berlin",
                 senderPhone: "030 1234567", senderEmail: "max@example.com",
-                companyName: "Tech Corp GmbH", department: "Personalabteilung", recipientStreet: "Innovationsallee 1", recipientCity: "80331 München",
-                dateLocation: "Berlin, 15. März 2026", subject: "Bewerbung als Fullstack-Entwickler",
+                companyName: "Tech Corp GmbH", department: "Einkauf / Beschaffung", recipientStreet: "Innovationsallee 1", recipientCity: "80331 München",
+                dateLocation: "Berlin, 15. März 2026", subject: "Angebot zur Erneuerung der IT-Infrastruktur",
                 greeting: "Sehr geehrte Damen und Herren,",
                 closingGreeting: "Mit freundlichen Grüßen",
                 paragraphs: [
-                    { id: "1", value: "Mit großem Interesse habe ich Ihre Stellenausschreibung gelesen." },
-                    { id: "2", value: "Wie Sie meinem Lebenslauf entnehmen können, verfüge ich über umfassende Erfahrung im Bereich Web-Applikationen und Architektur." }
+                    { id: "1", value: "vielen Dank für das freundliche Telefonat von letzter Woche bezüglich der Modernisierung Ihrer bestehenden IT-Infrastruktur." },
+                    { id: "2", value: "In der Anlage finden Sie unser detailliertes Angebot für die Migration auf die neuen Cloud-Server, inklusive Hardware und Consulting. Wir haben dabei besonderen Wert auf hohe Ausfallsicherheit und DSGVO-Konformität gelegt." },
+                    { id: "3", value: "Für Rückfragen stehe ich Ihnen jederzeit gerne zur Verfügung. Ich freue mich darauf, dieses Projekt gemeinsam mit Ihnen umzusetzen." }
                 ],
-                attachments: [{ id: "1", value: "Lebenslauf" }, { id: "2", value: "Zeugnisse" }]
+                attachments: [{ id: "1", value: "Detailliertes Angebot" }, { id: "2", value: "Projekt-Timeline" }]
             });
             showToast("Beispiel geladen");
         }
