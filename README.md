@@ -1,4 +1,4 @@
-# [ din5008-generator ]
+# din5008-generator
 
 > A fast, secure, and privacy-first tool to generate perfect German business letters complying with the strict DIN 5008 (Form A) standards.
 
