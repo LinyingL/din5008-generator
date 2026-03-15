@@ -20,7 +20,7 @@ An offline, privacy-first, zero-dependency HTML generator for professional Germa
 ![App Interface Placeholder](https://via.placeholder.com/800x450.png?text=App+Interface+Screenshot+Goes+Here)
 *The clean, distraction-free interface for generating your letter.*
 
-![Generated PDF Placeholder](https://via.placeholder.com/600x800.png?text=Generated+DIN5008+PDF+Goes+Here)
+![Generated PDF](assets/pdf-preview.png)
 *The precise, print-ready PDF output with perfect folding marks and window alignment.*
 
 ### ✨ Features
@@ -53,7 +53,7 @@ Ein datenschutzfreundlicher, lokaler HTML-Generator ohne Abhängigkeiten für pr
 ![App Interface Platzhalter](https://via.placeholder.com/800x450.png?text=Screenshot+der+App-Oberflaeche+hier+einfuegen)
 *Die übersichtliche Benutzeroberfläche zur Erstellung Ihres Briefes.*
 
-![Generiertes PDF Platzhalter](https://via.placeholder.com/600x800.png?text=Screenshot+des+generierten+PDFs+hier+einfuegen)
+![Generiertes PDF](assets/pdf-preview.png)
 *Das präzise, druckfertige PDF mit perfekten Faltmarken und Fensterpositionierung.*
 
 ### ✨ Funktionen
