@@ -1,66 +1,85 @@
-# DIN 5008 (Form A) Letter Generator
+# [ din5008-generator ]
 
-![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+> An offline, privacy-first, zero-dependency HTML generator for professional German business letters complying with strict DIN 5008 (Form A) standards.
 
-[EN](#english) | [DE](#deutsch)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Format](https://img.shields.io/badge/standard-DIN%205008%20Form%20A-success.svg)]()
+[![Status](https://img.shields.io/badge/status-offline%20ready-brightgreen.svg)]()
+
+[ EN ](#english) | [ DE ](#deutsch)
 
 ---
 
 <a name="english"></a>
-## 🇬🇧 English
+## / en
 
-An offline, privacy-first, zero-dependency HTML generator for professional German business letters complying with the strict **DIN 5008 Form A** typography and layout standards.
+### Abstract
+A minimal, client-side only tool to generate pixel-perfect, print-ready PDFs for German business correspondence. No trackers, no external assets, no server-side processing.
 
-### 🌟 Try it Live
-**[👉 Click here for the Live Demo](https://LinyingL.github.io/din5008-generator/)**
+### Demo
+**[`[ Launch Live Instance ]`](https://LinyingL.github.io/din5008-generator/)**
 
-### 📸 Screenshots
-![Generated PDF](assets/pdf-preview.png)
-*The precise, print-ready PDF output with perfect folding marks and window alignment.*
+### Core Specifications
+* **Architecture:** Strict single-file structure (`index.html`).
+* **Privacy Engine:** 100% offline. In-browser sandbox data processing.
+* **Standard Compliance:** Absolute millimeter positioning (`mm`) for Form A address windows. Mathematically accurate folding/punching metrics.
+* **Typography:** Precision justified rendering with native `hyphens: auto`.
+* **State Persistence:** Local storage retention. Full support for JSON payload import/export.
+* **Rendering Engine:** Pure CSS `@media print` directives for native A4 PDF generation.
 
-### ✨ Features
-- **100% Offline & Privacy-First**: All data processing and PDF generation happen directly in your local browser sandbox. No server communication, no data leaks. Perfect for sensitive information.
-- **Zero Dependencies**: It's just a single `index.html` file.
-- **Strict DIN 5008 Compliance**: Absolute positioning in `mm` for Form A address windows, accurate folding/punching marks, and justified text alignment with auto hyphenation.
-- **Data Persistence & Export**: Auto-saves drafts and allows exporting/importing `.json` templates.
-- **Print to PDF**: Built-in CSS `@media print` logic cleanly removes the UI for a perfect A4 PDF generation via your browser's print dialog.
+### Render Output
+![Detailed Print Render](assets/pdf-preview.png)
+*> Print-ready PDF output showcasing folding marks and window structural alignment.*
 
-### 🚀 Local Usage
-1. Clone this repository or download the `index.html`.
-2. Open `index.html` in your browser.
-3. Fill in your details.
-4. Click **"Als PDF / Drucken"** (Print to PDF).
-   > **Important Print Settings:** Ensure "Headers and footers" are unchecked, and set scaling to 100/Default.
+### Local Deployment
+```bash
+# 1. Clone repository
+$ git clone https://github.com/LinyingL/din5008-generator.git
+
+# 2. Open deployment file
+$ open din5008-generator/index.html
+```
+
+> **[!] Print Directive:** 
+> Hardware layout accuracy requires scaling set strictly to `100%` / Default. System "Headers and footers" must be disabled in the print dialog.
 
 ---
 
 <a name="deutsch"></a>
-## 🇩🇪 Deutsch
+## / de
 
-Ein datenschutzfreundlicher, lokaler HTML-Generator ohne Abhängigkeiten für professionelle deutsche Geschäftsbriefe, der die strengen Typografie- und Layout-Standards der **DIN 5008 Form A** erfüllt.
+### Zusammenfassung
+Ein minimalistisches, rein client-seitiges Werkzeug zur Erstellung pixelgenauer, druckfertiger PDFs für deutsche Geschäftskorrespondenz. Keine Tracker, keine externen Assets, keine Serververarbeitung.
 
-### 🌟 Live ausprobieren
-**[👉 Hier geht's zur Live-Demo](https://LinyingL.github.io/din5008-generator/)**
+### Demo
+**[`[ Live-Instanz ausführen ]`](https://LinyingL.github.io/din5008-generator/)**
 
-### 📸 Screenshots
-![Generiertes PDF](assets/pdf-preview.png)
-*Das präzise, druckfertige PDF mit perfekten Faltmarken und Fensterpositionierung.*
+### Kernspezifikationen
+* **Architektur:** Strikte Einzeldateistruktur (`index.html`).
+* **Privacy Engine:** 100% offline. Datenverarbeitung erfolgt lokal in der Browser-Sandbox.
+* **Standardkonformität:** Absolute Millimeterpositionierung (`mm`) für Form A Adressfenster. Exakte Falt- und Lochkennzahlen.
+* **Typografie:** Präziser Blocksatz mit nativer Silbentrennung (`hyphens: auto`).
+* **Zustandsspeicherung:** Lokale Datensicherung. Volle Unterstützung für JSON Import/Export.
+* **Rendering-Engine:** Reine CSS `@media print` Direktiven für die native A4 PDF-Generierung.
 
-### ✨ Funktionen
-- **100% Offline & Datenschutz**: Die gesamte Datenverarbeitung und PDF-Generierung erfolgt lokal in der Sandbox Ihres Browsers. Keine Server-Kommunikation, keine Datenlecks. Ideal für sensible Informationen.
-- **Keine Abhängigkeiten**: Es handelt sich um eine einzige `index.html` Datei.
-- **Strenge DIN 5008 Einhaltung**: Absolute Positionierung in `mm` für Form A Brieffenster, exakte Falt- und Lochmarken.
-- **Datenspeicherung & Export**: Automatisches Speichern von Entwürfen und Im-/Export von `.json` Vorlagen.
-- **Als PDF drucken**: Integrierte CSS `@media print` Logik entfernt die UI für eine perfekte A4 PDF-Generierung über den Druckdialog.
+### Render-Ausgabe
+![Detailliertes PDF Render](assets/pdf-preview.png)
+*> Druckfertiges Render-Ergebnis mit exakten Faltmarken und struktureller Fensteranordnung.*
 
-### 🚀 Lokale Nutzung
-1. Klonen Sie dieses Repository oder laden Sie die `index.html` herunter.
-2. Öffnen Sie die Datei `index.html` in Ihrem Browser.
-3. Füllen Sie Ihre Daten aus.
-4. Klicken Sie auf **"Als PDF / Drucken"**.
-   > **Wichtige Druckeinstellungen:** Stellen Sie sicher, dass Optionen wie "Kopf- und Fußzeilen" deaktiviert sind und die Skalierung auf Standard (100%) eingestellt ist.
+### Lokales Deployment
+```bash
+# 1. Repository klonen
+$ git clone https://github.com/LinyingL/din5008-generator.git
+
+# 2. Deployment-Datei öffnen
+$ open din5008-generator/index.html
+```
+
+> **[!] Druckanweisung:** 
+> Um das exakte Layout (mm) zu erhalten, muss die Skalierung zwingend auf `100%` (Standard) gesetzt sein. "Kopf- und Fußzeilen" müssen im Druckdialog zwingend deaktiviert werden.
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+<br>
+
+`License:` [MIT](LICENSE)
