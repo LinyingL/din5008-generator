@@ -22,12 +22,14 @@ A simple tool that runs entirely in your browser to create clean, mathematically
 * **DIN 5008 Compliant:** Guarantees absolute millimeter accuracy (`mm`) for Form A address windows, folding marks, and punch holes.
 
 ### How to use
-**[`[ Launch the Live Tool Here ]`](https://LinyingL.github.io/din5008-generator/)**
-
-1. Click the link above to open the generator.
-2. Fill in your sender and recipient information, along with your letter content.
-3. Click **"Als PDF / Drucken"** (Print to PDF).
+**The most secure way to use this tool is offline:**
+1. Download the [`index.html`](https://raw.githubusercontent.com/LinyingL/din5008-generator/main/index.html) file directly to your computer (Right-click -> "Save Link As...").
+2. Double-click the downloaded file to open it in your web browser.
+3. Fill in your sender, recipient, and letter content.
+4. Click **"Als PDF / Drucken"** (Print to PDF).
    > **[!] Vital Print Setting:** To keep the exact millimeter alignment, you must set scale to **100%** (or Default) and **uncheck** "Headers and footers" in the print dialog.
+
+*Want to just test it first?* **[`[ Try the Live Demo Here ]`](https://LinyingL.github.io/din5008-generator/)**
 
 ### Preview
 ![PDF Output Preview](assets/pdf-preview.png)
@@ -54,12 +56,14 @@ Ein einfaches, direkt im Browser laufendes Werkzeug, um saubere, präzise und dr
 * **DIN 5008 Konform:** Garantiert absolute Millimetergenauigkeit (`mm`) für Form A Adressfenster, Falt- und Lochmarken.
 
 ### Benutzung
-**[`[ Starten Sie das Tool hier ]`](https://LinyingL.github.io/din5008-generator/)**
-
-1. Klicken Sie auf den Link oben, um den Generator zu öffnen.
-2. Füllen Sie Absender, Empfänger und den Inhalt Ihres Briefes aus.
-3. Klicken Sie auf **"Als PDF / Drucken"**.
+**Der sicherste Weg, dieses Tool zu verwenden, ist offline:**
+1. Laden Sie die Datei [`index.html`](https://raw.githubusercontent.com/LinyingL/din5008-generator/main/index.html) direkt auf Ihren Computer herunter (Rechtsklick -> "Link speichern unter...").
+2. Doppelklicken Sie auf die heruntergeladene Datei, um sie in Ihrem Webbrowser zu öffnen.
+3. Füllen Sie Absender, Empfänger und den Inhalt Ihres Briefes aus.
+4. Klicken Sie auf **"Als PDF / Drucken"**.
    > **[!] Wichtige Druckeinstellung:** Um die exakte Millimeter-Ausrichtung beizubehalten, müssen Sie die Skalierung auf **100%** (Standard) setzen und "Kopf- und Fußzeilen" im Druckdialog zwingend **deaktivieren**.
+
+*Möchten Sie es erst testen?* **[`[ Hier geht's zur Live-Demo ]`](https://LinyingL.github.io/din5008-generator/)**
 
 ### Vorschau
 ![PDF Output Vorschau](assets/pdf-preview.png)
