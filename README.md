@@ -15,11 +15,6 @@ An offline, privacy-first, zero-dependency HTML generator for professional Germa
 **[👉 Click here for the Live Demo](https://LinyingL.github.io/din5008-generator/)**
 
 ### 📸 Screenshots
-*(Please replace the placeholders below with actual screenshots of your app! Upload the images into an `assets` folder or paste them directly in GitHub issue comments to get their permalinks.)*
-
-![App Interface Placeholder](https://via.placeholder.com/800x450.png?text=App+Interface+Screenshot+Goes+Here)
-*The clean, distraction-free interface for generating your letter.*
-
 ![Generated PDF](assets/pdf-preview.png)
 *The precise, print-ready PDF output with perfect folding marks and window alignment.*
 
@@ -48,11 +43,6 @@ Ein datenschutzfreundlicher, lokaler HTML-Generator ohne Abhängigkeiten für pr
 **[👉 Hier geht's zur Live-Demo](https://LinyingL.github.io/din5008-generator/)**
 
 ### 📸 Screenshots
-*(Bitte tauschen Sie diese Platzhalter durch echte Screenshots Ihrer App aus!)*
-
-![App Interface Platzhalter](https://via.placeholder.com/800x450.png?text=Screenshot+der+App-Oberflaeche+hier+einfuegen)
-*Die übersichtliche Benutzeroberfläche zur Erstellung Ihres Briefes.*
-
 ![Generiertes PDF](assets/pdf-preview.png)
 *Das präzise, druckfertige PDF mit perfekten Faltmarken und Fensterpositionierung.*
 
