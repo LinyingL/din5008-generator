@@ -211,9 +211,13 @@
             /* Darker backdrop to show page bounds */
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            justify-content: flex-start;
             border-radius: 8px;
-            overflow-x: auto;
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
         }
 
         .a4-page {
@@ -222,7 +226,8 @@
             height: 297mm;
             position: relative;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            font-family: 'Times New Roman', Times, serif;
+            font-family: Arial, Helvetica, sans-serif;
+            /* Sans-serif highly recommended by DIN 5008 */
             font-size: 11pt;
             line-height: 1.25;
             color: black;
@@ -230,7 +235,7 @@
             flex-shrink: 0;
         }
 
-        /* Loch- und Faltmarken (Form A) nach DIN 5008 */
+        /* Loch- und Faltmarken (Form B) nach DIN 5008 */
         .mark {
             position: absolute;
             height: 0;
@@ -262,13 +267,14 @@
         .window-return {
             position: absolute;
             left: 20mm;
-            top: 27mm;
+            top: 45mm;
             width: 85mm;
             height: 17.7mm;
             /* 50.0pt */
             font-size: 8pt;
             text-decoration: underline;
-            padding-top: 5mm;
+            /* Unterstreichung ist klassischer Standard und hilft der visuellen Trennung */
+            padding-top: 1.5mm;
             box-sizing: border-box;
             white-space: nowrap;
             overflow: hidden;
@@ -279,7 +285,7 @@
         .window-address {
             position: absolute;
             left: 20mm;
-            top: 44.7mm;
+            top: 62.7mm;
             width: 85mm;
             height: 27.3mm;
             /* 6 lines */
@@ -299,8 +305,8 @@
         .info-block {
             position: absolute;
             right: 20mm;
-            top: 32mm;
-            /* Form A Informationsblock usually starts here */
+            top: 50mm;
+            /* Form B Informationsblock usually starts here */
             width: 75mm;
             font-size: 11pt;
             text-align: right;
@@ -338,7 +344,8 @@
 
         .body-text p {
             margin-bottom: 12pt;
-            text-align: justify;
+            text-align: left;
+            /* DIN 5008 prefers linkbündig (Flatterzatz), not justify */
             hyphens: auto;
             -webkit-hyphens: auto;
             -ms-hyphens: auto;
@@ -375,6 +382,31 @@
             margin-right: 6pt;
         }
 
+        /* Format A Overrides */
+        .a4-page[data-format="formA"] .mark-fold-1 {
+            top: 87mm;
+        }
+
+        .a4-page[data-format="formA"] .mark-fold-2 {
+            top: 192mm;
+        }
+
+        .a4-page[data-format="formA"] .window-return {
+            top: 27mm;
+        }
+
+        .a4-page[data-format="formA"] .window-address {
+            top: 44.7mm;
+        }
+
+        .a4-page[data-format="formA"] .info-block {
+            top: 32mm;
+        }
+
+        .a4-page[data-format="formA"] .letter-content {
+            top: 85mm;
+        }
+
         /* Toast Popup */
         .toast {
             position: fixed;
@@ -401,18 +433,26 @@
             body {
                 background: none;
                 padding: 0;
+                height: auto;
+            }
+
+            .container {
+                display: block;
+                max-width: none;
+                margin: 0;
             }
 
             .editor-panel {
-                display: none;
+                display: none !important;
             }
 
             .preview-panel {
                 display: block;
                 padding: 0;
-                position: static;
+                position: static !important;
                 box-shadow: none;
-                overflow: visible;
+                overflow: visible !important;
+                height: auto !important;
             }
 
             #preview-wrapper {
@@ -420,11 +460,19 @@
                 padding: 0;
                 display: block;
                 border-radius: 0;
+                overflow: visible !important;
+                max-height: none !important;
+                height: auto !important;
             }
 
             .a4-page {
                 box-shadow: none;
                 border: none;
+                page-break-after: always;
+            }
+
+            .a4-page:last-child {
+                page-break-after: auto;
             }
 
             @page {
@@ -444,9 +492,28 @@
 
             <form id="letterForm">
                 <div class="form-section">
+                    <h3 class="section-title">📏 Format (DIN 5008)</h3>
+                    <div class="form-group" style="display: flex; gap: 20px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text);">
+                            <input type="radio" name="dinFormat" value="formA" style="width: auto;"> Form A
+                            (Hochgestellt)
+                        </label>
+                        <label
+                            style="display: flex; align-items: center; gap: 5px; cursor: pointer; color: var(--text);">
+                            <input type="radio" name="dinFormat" value="formB" checked style="width: auto;"> Form B
+                            (Standard)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-section">
                     <h3 class="section-title">👤 Absender</h3>
                     <div class="form-group">
                         <input type="text" id="senderName" placeholder="Name / Firma">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="senderCO" placeholder="c/o (Optional)">
                     </div>
                     <div class="form-group">
                         <input type="text" id="senderStreet" placeholder="Straße und Hausnummer">
@@ -528,33 +595,7 @@
         <!-- Preview Panel -->
         <div class="panel preview-panel">
             <div id="preview-wrapper">
-                <div class="a4-page" id="document-preview">
-                    <!-- Falt- und Lochmarken -->
-                    <div class="mark mark-fold-1"></div>
-                    <div class="mark mark-hole"></div>
-                    <div class="mark mark-fold-2"></div>
-
-                    <!-- Rücksendeangabe (Fensterzeile) -->
-                    <div class="window-return" id="prev-return"></div>
-
-                    <!-- Empfängeradresse (Fenster) -->
-                    <div class="window-address" id="prev-address"></div>
-
-                    <!-- Informationsblock (Rechts) -->
-                    <div class="info-block" id="prev-info"></div>
-
-                    <!-- Briefbereich -->
-                    <div class="letter-content">
-                        <div class="subject" id="prev-subject"></div>
-                        <div class="greeting" id="prev-greeting"></div>
-                        <div class="body-text" id="prev-body"></div>
-                        <div class="closing-section">
-                            <div class="closing-phrase" id="prev-closing"></div>
-                            <div class="signature-name" id="prev-signature"></div>
-                        </div>
-                        <div class="attachments-list" id="prev-attachments"></div>
-                    </div>
-                </div>
+                <!-- Pages will be generated dynamically here -->
             </div>
         </div>
     </div>
@@ -585,8 +626,13 @@
         const updatePreview = debounce(() => {
             const getVal = id => escapeHTML(document.getElementById(id).value.trim());
 
+            // Format
+            const formatRadio = document.querySelector('input[name="dinFormat"]:checked');
+            const currentFormat = formatRadio ? formatRadio.value : 'formB';
+
             // Absender
             const sName = getVal('senderName');
+            const sCO = getVal('senderCO');
             const sStr = getVal('senderStreet');
             const sCity = getVal('senderCity');
             const sPhone = getVal('senderPhone');
@@ -599,8 +645,12 @@
             const rCity = getVal('recipientCity');
 
             // Rücksendeangabe
-            const returnParts = [sName, sStr, sCity].filter(Boolean);
-            document.getElementById('prev-return').innerHTML = returnParts.join(' · ');
+            const returnParts = [];
+            if (sName) returnParts.push(sName);
+            if (sCO) returnParts.push(`c/o ${sCO.replace(/^c\/o\s*/i, '')}`);
+            if (sStr) returnParts.push(sStr);
+            if (sCity) returnParts.push(sCity);
+            const returnHtml = returnParts.join(' · ');
 
             // Anschrift
             let addrHtml = '';
@@ -608,45 +658,132 @@
             if (rDept) addrHtml += `<p>${rDept}</p>`;
             if (rStr) addrHtml += `<p>${rStr}</p>`;
             if (rCity) addrHtml += `<p>${rCity}</p>`;
-            document.getElementById('prev-address').innerHTML = addrHtml;
 
             // Informationsblock (Rechts)
             let infoHtml = '<div class="info-contact">';
             if (sName) infoHtml += `<p><strong>${sName}</strong></p>`;
+            if (sCO) infoHtml += `<p>c/o ${sCO.replace(/^c\/o\s*/i, '')}</p>`;
+            if (sStr) infoHtml += `<p>${sStr}</p>`;
+            if (sCity) infoHtml += `<p>${sCity}</p>`;
+            if (sPhone || sEmail) infoHtml += `<div style="margin-top: 5mm;">`;
             if (sPhone) infoHtml += `<p>Tel: ${sPhone}</p>`;
             if (sEmail) infoHtml += `<p>${sEmail}</p>`;
+            if (sPhone || sEmail) infoHtml += `</div>`;
             infoHtml += '</div>';
 
             const dateStr = getVal('dateLocation');
             if (dateStr) infoHtml += `<div class="info-date">${dateStr}</div>`;
-            document.getElementById('prev-info').innerHTML = infoHtml;
 
-            // Betreff und Begrüßung
-            document.getElementById('prev-subject').innerHTML = getVal('subject');
-            document.getElementById('prev-greeting').innerHTML = getVal('greeting');
+            // Reset Wrapper
+            const wrapper = document.getElementById('preview-wrapper');
+            wrapper.innerHTML = '';
+
+            let pageNum = 1;
+
+            function createNewPage() {
+                const page = document.createElement('div');
+                page.className = 'a4-page';
+                page.setAttribute('data-format', currentFormat);
+
+                if (pageNum === 1) {
+                    page.innerHTML = `
+                        <div class="mark mark-fold-1"></div>
+                        <div class="mark mark-hole"></div>
+                        <div class="mark mark-fold-2"></div>
+                        <div class="window-return">${returnHtml}</div>
+                        <div class="window-address">${addrHtml}</div>
+                        <div class="info-block">${infoHtml}</div>
+                        <div class="letter-content" style="overflow: hidden;"></div>
+                    `;
+                } else {
+                    page.innerHTML = `
+                        <div class="page-indicator" style="position: absolute; top: 20mm; right: 20mm; font-size: 11pt;" data-page="${pageNum}"></div>
+                        <div class="letter-content" style="top: 35mm; overflow: hidden;"></div>
+                    `;
+                }
+                wrapper.appendChild(page);
+                return page.querySelector('.letter-content');
+            }
+
+            let contentArea = createNewPage();
+
+            function appendWithPagination(element) {
+                contentArea.appendChild(element);
+                // We use +1 tolerance for potential sub-pixel rounding
+                if (contentArea.scrollHeight > contentArea.clientHeight + 1) {
+                    contentArea.removeChild(element);
+                    pageNum++;
+                    contentArea = createNewPage();
+                    contentArea.appendChild(element);
+                }
+            }
+
+            // Betreff
+            const subjectStr = getVal('subject');
+            if (subjectStr) {
+                const subjectDiv = document.createElement('div');
+                subjectDiv.className = 'subject';
+                subjectDiv.innerHTML = subjectStr;
+                appendWithPagination(subjectDiv);
+            }
+
+            // Begrüßung
+            const greetingStr = getVal('greeting');
+            if (greetingStr) {
+                const greetingDiv = document.createElement('div');
+                greetingDiv.className = 'greeting';
+                greetingDiv.innerHTML = greetingStr;
+                appendWithPagination(greetingDiv);
+            }
 
             // Textkörper
-            const bodyHtml = state.paragraphs
-                .filter(p => document.getElementById(`para_${p.id}`).value.trim() !== '')
-                .map(p => `<p>${escapeHTML(document.getElementById(`para_${p.id}`).value)}</p>`)
-                .join('');
-            document.getElementById('prev-body').innerHTML = bodyHtml;
+            state.paragraphs.forEach(p => {
+                const inputEl = document.getElementById(`para_${p.id}`);
+                const text = inputEl ? inputEl.value.trim() : '';
+                const indentEl = document.getElementById(`indent_${p.id}`);
+                const indentLevel = indentEl ? parseInt(indentEl.value || '0', 10) : 0;
+                
+                if (text) {
+                    const pEl = document.createElement('div');
+                    pEl.className = 'body-text';
+                    // DIN 5008 typische Einrückung: 12.5mm pro Stufe
+                    const indentStyle = indentLevel > 0 ? ` style="margin-left: ${indentLevel * 12.5}mm;"` : '';
+                    pEl.innerHTML = `<p${indentStyle}>${escapeHTML(text)}</p>`;
+                    appendWithPagination(pEl);
+                }
+            });
 
             // Schluss
-            document.getElementById('prev-closing').innerHTML = getVal('closingGreeting');
-            document.getElementById('prev-signature').innerHTML = sName;
+            const closingDiv = document.createElement('div');
+            closingDiv.className = 'closing-section';
+            closingDiv.innerHTML = `<div class="closing-phrase">${getVal('closingGreeting')}</div><div class="signature-name">${sName}</div>`;
+            appendWithPagination(closingDiv);
 
             // Anlagen
-            const validAtt = state.attachments.filter(a => document.getElementById(`att_${a.id}`).value.trim() !== '');
+            const validAtt = state.attachments.filter(a => {
+                const el = document.getElementById(`att_${a.id}`);
+                return el && el.value.trim() !== '';
+            });
+
             if (validAtt.length > 0) {
-                let attHtml = '<div class="title">Anlagen</div><ul>';
+                const attDiv = document.createElement('div');
+                attDiv.className = 'attachments-list';
+                let attHtmlOuter = '<div class="title">Anlagen</div><ul>';
                 validAtt.forEach(a => {
-                    attHtml += `<li>${escapeHTML(document.getElementById(`att_${a.id}`).value)}</li>`;
+                    attHtmlOuter += `<li>${escapeHTML(document.getElementById(`att_${a.id}`).value)}</li>`;
                 });
-                attHtml += '</ul>';
-                document.getElementById('prev-attachments').innerHTML = attHtml;
-            } else {
-                document.getElementById('prev-attachments').innerHTML = '';
+                attHtmlOuter += '</ul>';
+                attDiv.innerHTML = attHtmlOuter;
+                appendWithPagination(attDiv);
+            }
+
+            // Post-process page numbers with total page count (DIN 5008 anti-loss standard)
+            if (pageNum > 1) {
+                const indicators = wrapper.querySelectorAll('.page-indicator');
+                indicators.forEach(ind => {
+                    const p = ind.getAttribute('data-page');
+                    ind.innerHTML = `- Seite ${p} von ${pageNum} -`;
+                });
             }
 
             // Sicherung in LocalStorage
@@ -692,15 +829,25 @@
         function renderDynamicLists() {
             // Paragraphs
             const pCont = document.getElementById('paragraphsContainer');
-            pCont.innerHTML = state.paragraphs.map((p, idx) => `
+            pCont.innerHTML = state.paragraphs.map((p, idx) => {
+                const ind = p.indent || 0;
+                return `
                 <div class="paragraph-item">
                     <div class="flex-between">
-                        <span style="font-size:12px; font-weight:bold; color:#666">Absatz ${idx + 1}</span>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:12px; font-weight:bold; color:#666">Absatz ${idx + 1}</span>
+                            <select id="indent_${p.id}" style="padding: 2px 5px; font-size: 12px; border-radius: 4px; border: 1px solid var(--border);">
+                                <option value="0" ${ind === 0 ? 'selected' : ''}>Standard</option>
+                                <option value="1" ${ind === 1 ? 'selected' : ''}>Einrückung 1</option>
+                                <option value="2" ${ind === 2 ? 'selected' : ''}>Einrückung 2</option>
+                            </select>
+                        </div>
                         <button type="button" class="btn-danger" onclick="removeParagraph('${p.id}')">Entfernen</button>
                     </div>
                     <textarea id="para_${p.id}" placeholder="Text...">${escapeHTML(p.value || '')}</textarea>
                 </div>
-            `).join('');
+                `;
+            }).join('');
 
             // Anlagen
             const aCont = document.getElementById('attachmentsContainer');
@@ -716,12 +863,19 @@
             state.attachments.forEach(a => { const el = document.getElementById(`att_${a.id}`); if (el && a.value) el.value = a.value; });
 
             // Re-bind specific inputs
-            document.querySelectorAll('#paragraphsContainer textarea, #attachmentsContainer input').forEach(el => {
+            document.querySelectorAll('#paragraphsContainer textarea, #paragraphsContainer select, #attachmentsContainer input').forEach(el => {
                 el.addEventListener('input', (e) => {
                     const idParts = e.target.id.split('_');
-                    const array = idParts[0] === 'para' ? state.paragraphs : state.attachments;
-                    const item = array.find(x => x.id === idParts[1]);
-                    if (item) item.value = e.target.value;
+                    if (idParts[0] === 'para') {
+                        const item = state.paragraphs.find(x => x.id === idParts[1]);
+                        if (item) item.value = e.target.value;
+                    } else if (idParts[0] === 'indent') {
+                        const item = state.paragraphs.find(x => x.id === idParts[1]);
+                        if (item) item.indent = parseInt(e.target.value, 10);
+                    } else if (idParts[0] === 'att') {
+                        const item = state.attachments.find(x => x.id === idParts[1]);
+                        if (item) item.value = e.target.value;
+                    }
                     updatePreview();
                 });
             });
@@ -731,6 +885,7 @@
         function collectData() {
             return {
                 senderName: document.getElementById('senderName').value,
+                senderCO: document.getElementById('senderCO').value,
                 senderStreet: document.getElementById('senderStreet').value,
                 senderCity: document.getElementById('senderCity').value,
                 senderPhone: document.getElementById('senderPhone').value,
@@ -743,13 +898,18 @@
                 subject: document.getElementById('subject').value,
                 greeting: document.getElementById('greeting').value,
                 closingGreeting: document.getElementById('closingGreeting').value,
-                paragraphs: state.paragraphs.map(p => ({ id: p.id, value: document.getElementById(`para_${p.id}`)?.value || '' })),
+                dinFormat: document.querySelector('input[name="dinFormat"]:checked') ? document.querySelector('input[name="dinFormat"]:checked').value : 'formB',
+                paragraphs: state.paragraphs.map(p => ({ 
+                    id: p.id, 
+                    value: document.getElementById(`para_${p.id}`)?.value || '',
+                    indent: parseInt(document.getElementById(`indent_${p.id}`)?.value || '0', 10)
+                })),
                 attachments: state.attachments.map(a => ({ id: a.id, value: document.getElementById(`att_${a.id}`)?.value || '' }))
             };
         }
 
         function restoreData(data) {
-            const ids = ['senderName', 'senderStreet', 'senderCity', 'senderPhone', 'senderEmail',
+            const ids = ['senderName', 'senderCO', 'senderStreet', 'senderCity', 'senderPhone', 'senderEmail',
                 'companyName', 'department', 'recipientStreet', 'recipientCity',
                 'dateLocation', 'subject', 'greeting', 'closingGreeting'];
 
@@ -757,6 +917,14 @@
                 const el = document.getElementById(id);
                 if (el && data[id] !== undefined) el.value = data[id];
             });
+
+            if (data.dinFormat) {
+                const radio = document.querySelector(`input[name="dinFormat"][value="${data.dinFormat}"]`);
+                if (radio) radio.checked = true;
+            } else {
+                const radio = document.querySelector(`input[name="dinFormat"][value="formB"]`);
+                if (radio) radio.checked = true;
+            }
 
             state.paragraphs = Array.isArray(data.paragraphs) ? data.paragraphs : [];
             state.attachments = Array.isArray(data.attachments) ? data.attachments : [];
