@@ -50,7 +50,7 @@ A professional tool that runs entirely in your browser to create clean, mathemat
 *Want to just test it first?* **[`[ Try the Live Demo Here ]`](https://LinyingL.github.io/din5008-generator/)**
 
 ### Preview
-![App Preview](assets/pdf-preview.png)
+![App Preview](assets/preview.png)
 *> Full editor with live A4 preview — templates, profiles, footer, and all new features.*
 
 ### For Developers
@@ -102,7 +102,7 @@ Ein professionelles, direkt im Browser laufendes Werkzeug, um saubere, präzise 
 *Möchten Sie es erst testen?* **[`[ Hier geht's zur Live-Demo ]`](https://LinyingL.github.io/din5008-generator/)**
 
 ### Vorschau
-![App Vorschau](assets/pdf-preview.png)
+![App Vorschau](assets/preview.png)
 *> Vollständiger Editor mit Live-A4-Vorschau — Vorlagen, Profile, Fußzeile und alle neuen Funktionen.*
 
 ### Für Entwickler
