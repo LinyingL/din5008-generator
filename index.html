@@ -14,6 +14,25 @@
             --text-light: #555;
             --bg-light: #f9fafb;
             --border: #e0e0e0;
+            --panel-bg: white;
+            --input-bg: white;
+            --hover-bg: #eef0f2;
+            --preview-bg: #d1d5db;
+            --page-shadow: rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --bg-grad: linear-gradient(135deg, #312e81 0%, #581c87 100%);
+            --text: #e2e8f0;
+            --text-light: #94a3b8;
+            --bg-light: #1e293b;
+            --border: #334155;
+            --panel-bg: #1e293b;
+            --input-bg: #0f172a;
+            --hover-bg: #334155;
+            --preview-bg: #0f172a;
+            --page-shadow: rgba(0,0,0,0.4);
         }
 
         * {
@@ -46,10 +65,10 @@
         }
 
         .panel {
-            background: white;
+            background: var(--panel-bg);
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 30px var(--page-shadow);
         }
 
         .preview-panel {
@@ -104,7 +123,8 @@
         }
 
         input,
-        textarea {
+        textarea,
+        select.form-select {
             width: 100%;
             padding: 10px;
             border: 1px solid var(--border);
@@ -112,6 +132,8 @@
             font-size: 14px;
             font-family: inherit;
             transition: all 0.2s;
+            background: var(--input-bg);
+            color: var(--text);
         }
 
         input:focus,
@@ -207,8 +229,7 @@
 
         /* ========= DIN 5008 Layout (Display/Print) ========= */
         #preview-wrapper {
-            background: #d1d5db;
-            /* Darker backdrop to show page bounds */
+            background: var(--preview-bg);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -429,6 +450,128 @@
             transform: translateY(0);
         }
 
+        /* Toolbar */
+        .top-toolbar {
+            max-width: 1400px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .top-toolbar select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .top-toolbar select option { color: #333; background: white; }
+        .top-toolbar button {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .top-toolbar button:hover { background: rgba(255,255,255,0.25); }
+        .toolbar-spacer { flex: 1; }
+
+        /* Profile / Address Book inline controls */
+        .inline-controls {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .inline-controls select {
+            flex: 1;
+            padding: 7px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            background: var(--input-bg);
+            color: var(--text);
+        }
+        .inline-controls button {
+            padding: 6px 10px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        /* Footer on DIN page */
+        .page-footer {
+            position: absolute;
+            bottom: 5mm;
+            left: 25mm;
+            right: 20mm;
+            font-size: 7.5pt;
+            color: #555;
+            border-top: 0.5pt solid #ccc;
+            padding-top: 2mm;
+            display: flex;
+            gap: 8mm;
+            line-height: 1.4;
+        }
+        .page-footer .footer-col { flex: 1; }
+        .page-footer .footer-col p { margin: 0; }
+
+        /* Reference Line */
+        .reference-line {
+            display: flex;
+            gap: 10mm;
+            font-size: 8.5pt;
+            color: #555;
+            margin-bottom: 12pt;
+            padding-bottom: 6pt;
+            border-bottom: 0.5pt solid #ddd;
+        }
+        .reference-line .ref-item label {
+            font-size: 7pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5pt;
+            color: #888;
+            display: block;
+            margin-bottom: 1pt;
+        }
+
+        /* Letter Logo */
+        .letter-logo {
+            position: absolute;
+            top: 10mm;
+            right: 20mm;
+            max-width: 50mm;
+            max-height: 20mm;
+            object-fit: contain;
+        }
+
+        /* QR Code in footer */
+        .qr-container {
+            position: absolute;
+            bottom: 5mm;
+            right: 20mm;
+            width: 18mm;
+            height: 18mm;
+        }
+        .qr-container img, .qr-container svg { width: 100%; height: 100%; }
+
+        /* Drag handle */
+        .drag-handle {
+            cursor: grab;
+            color: #999;
+            font-size: 16px;
+            user-select: none;
+            padding: 0 4px;
+        }
+        .drag-handle:active { cursor: grabbing; }
+        .paragraph-item.dragging { opacity: 0.4; }
+        .paragraph-item.drag-over { border-top: 3px solid var(--primary); }
+
         @media print {
             body {
                 background: none;
@@ -442,7 +585,8 @@
                 margin: 0;
             }
 
-            .editor-panel {
+            .editor-panel,
+            .top-toolbar {
                 display: none !important;
             }
 
@@ -484,11 +628,26 @@
 </head>
 
 <body>
+    <!-- Toolbar -->
+    <div class="top-toolbar">
+        <span style="color:white;font-weight:600;font-size:15px;">📄 DIN 5008</span>
+        <select id="templateSelect" onchange="loadTemplate(this.value)">
+            <option value="">— Vorlage wählen —</option>
+            <option value="kuendigung">📋 Kündigung</option>
+            <option value="mahnung">⚠️ Mahnung</option>
+            <option value="angebot">💼 Angebot</option>
+            <option value="bewerbung">📝 Bewerbung</option>
+            <option value="allgemein">📄 Allgemein</option>
+        </select>
+        <div class="toolbar-spacer"></div>
+        <button onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    </div>
+
     <div class="container">
         <!-- Editor Panel -->
         <div class="panel editor-panel">
             <h1>📄 DIN 5008 Editor</h1>
-            <p class="subtitle">Sichere, standardkonforme Architektur</p>
+            <p class="subtitle">Sichere, standardkonforme Architektur — <kbd>Ctrl+S</kbd> Speichern · <kbd>Ctrl+P</kbd> Drucken</p>
 
             <form id="letterForm">
                 <div class="form-section">
@@ -509,6 +668,11 @@
 
                 <div class="form-section">
                     <h3 class="section-title">👤 Absender</h3>
+                    <div class="inline-controls">
+                        <select id="profileSelect" onchange="loadProfile(this.value)"><option value="">— Profil wählen —</option></select>
+                        <button type="button" class="btn-secondary" onclick="saveProfile()">💾</button>
+                        <button type="button" class="btn-danger" onclick="deleteProfile()">🗑️</button>
+                    </div>
                     <div class="form-group">
                         <input type="text" id="senderName" placeholder="Name / Firma">
                     </div>
@@ -531,6 +695,11 @@
 
                 <div class="form-section">
                     <h3 class="section-title">🏢 Empfänger</h3>
+                    <div class="inline-controls">
+                        <select id="contactSelect" onchange="loadContact(this.value)"><option value="">— Kontakt wählen —</option></select>
+                        <button type="button" class="btn-secondary" onclick="saveContact()">💾</button>
+                        <button type="button" class="btn-danger" onclick="deleteContact()">🗑️</button>
+                    </div>
                     <div class="form-group">
                         <input type="text" id="companyName" placeholder="Firmenname (Optional)">
                     </div>
@@ -546,9 +715,19 @@
                 </div>
 
                 <div class="form-section">
+                    <h3 class="section-title">🔖 Bezugszeichen (Optional)</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <div class="form-group"><label>Ihr Zeichen</label><input type="text" id="refYourSign" placeholder="Ihr Zeichen"></div>
+                        <div class="form-group"><label>Unser Zeichen</label><input type="text" id="refOurSign" placeholder="Unser Zeichen"></div>
+                        <div class="form-group"><label>Ihr Schreiben vom</label><input type="text" id="refYourDate" placeholder="TT.MM.JJJJ"></div>
+                        <div class="form-group"><label>Datum</label><input type="text" id="refDate" placeholder="wird automatisch gesetzt"></div>
+                    </div>
+                </div>
+
+                <div class="form-section">
                     <h3 class="section-title">📄 Metadaten</h3>
                     <div class="form-group">
-                        <input type="text" id="dateLocation" placeholder="Datum (z.B. 15. März 2026)">
+                        <input type="text" id="dateLocation" placeholder="Ort, Datum (wird automatisch gesetzt)">
                     </div>
                     <div class="form-group">
                         <input type="text" id="subject" placeholder="Betreff">
@@ -575,6 +754,37 @@
                     <h3 class="section-title">📎 Anlagen (Optional)</h3>
                     <div id="attachmentsContainer"></div>
                     <button type="button" class="btn-success" onclick="addAttachment()">➕ Anlage hinzufügen</button>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">🖼️ Logo (Optional)</h3>
+                    <div class="form-group">
+                        <input type="file" id="logoUpload" accept="image/*" onchange="handleLogo(event)" style="font-size:13px;">
+                    </div>
+                    <button type="button" class="btn-danger" onclick="removeLogo()" style="font-size:12px;">Logo entfernen</button>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">🏛️ Geschäftsangaben / Fußzeile (Optional)</h3>
+                    <p style="font-size:12px;color:var(--text-light);margin-bottom:10px;">Pflicht für GmbH, UG, AG — erscheint am Seitenende.</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <div class="form-group"><label>Geschäftsführer</label><input type="text" id="footerCEO" placeholder="Max Mustermann"></div>
+                        <div class="form-group"><label>Rechtsform</label><input type="text" id="footerLegal" placeholder="GmbH / UG / e.K."></div>
+                        <div class="form-group"><label>Amtsgericht</label><input type="text" id="footerCourt" placeholder="AG München"></div>
+                        <div class="form-group"><label>HRB / HRA Nr.</label><input type="text" id="footerHRB" placeholder="HRB 123456"></div>
+                        <div class="form-group"><label>USt-IdNr.</label><input type="text" id="footerVAT" placeholder="DE123456789"></div>
+                        <div class="form-group"><label>Steuer-Nr.</label><input type="text" id="footerTax" placeholder="123/456/78901"></div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">🏦 Bankverbindung (Optional)</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <div class="form-group"><label>Bankname</label><input type="text" id="bankName" placeholder="Deutsche Bank"></div>
+                        <div class="form-group"><label>IBAN</label><input type="text" id="bankIBAN" placeholder="DE89 3704 0044 0532 0130 00"></div>
+                        <div class="form-group"><label>BIC</label><input type="text" id="bankBIC" placeholder="COBADEFFXXX"></div>
+                        <div class="form-group"><label>Kontoinhaber</label><input type="text" id="bankHolder" placeholder="Max Mustermann"></div>
+                    </div>
                 </div>
             </form>
 
@@ -603,46 +813,210 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        const STORAGE_KEY = 'din5008_autosave_v2';
-        let state = { paragraphs: [], attachments: [] };
+        const STORAGE_KEY = 'din5008_autosave_v3';
+        const PROFILES_KEY = 'din5008_profiles';
+        const CONTACTS_KEY = 'din5008_contacts';
+        const DARKMODE_KEY = 'din5008_darkmode';
+        let state = { paragraphs: [], attachments: [], logoData: null };
 
-        // 1. Utilities: Security (XSS Escaping) & Performance (Debounce)
         function escapeHTML(str) {
             if (!str) return '';
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+        function debounce(fn, ms) {
+            let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+        }
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
+        function $(id) { return document.getElementById(id); }
+        function getVal(id) { return escapeHTML($(id).value.trim()); }
+        function parseRichText(text) {
+            return escapeHTML(text).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
         }
 
-        function debounce(func, wait) {
-            let timeout;
-            return function (...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
+        // Dark Mode
+        function toggleDarkMode() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? '' : 'dark');
+            $('darkModeBtn').textContent = isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+            localStorage.setItem(DARKMODE_KEY, isDark ? '' : 'dark');
         }
+        function initDarkMode() {
+            const saved = localStorage.getItem(DARKMODE_KEY);
+            if (saved === 'dark') { document.body.setAttribute('data-theme', 'dark'); $('darkModeBtn').textContent = '☀️ Light Mode'; }
+        }
+
+        // Sender Profiles
+        function getProfiles() { try { return JSON.parse(localStorage.getItem(PROFILES_KEY)) || {}; } catch { return {}; } }
+        function renderProfileDropdown() {
+            const profiles = getProfiles();
+            const sel = $('profileSelect');
+            sel.innerHTML = '<option value="">— Profil wählen —</option>';
+            Object.keys(profiles).forEach(name => { const o = document.createElement('option'); o.value = name; o.textContent = name; sel.appendChild(o); });
+        }
+        function saveProfile() {
+            const name = $('senderName').value.trim();
+            if (!name) { alert('Bitte zuerst einen Absendernamen eingeben.'); return; }
+            const profiles = getProfiles();
+            profiles[name] = { senderName: $('senderName').value, senderCO: $('senderCO').value, senderStreet: $('senderStreet').value,
+                senderCity: $('senderCity').value, senderPhone: $('senderPhone').value, senderEmail: $('senderEmail').value,
+                footerCEO: $('footerCEO').value, footerLegal: $('footerLegal').value, footerCourt: $('footerCourt').value,
+                footerHRB: $('footerHRB').value, footerVAT: $('footerVAT').value, footerTax: $('footerTax').value,
+                bankName: $('bankName').value, bankIBAN: $('bankIBAN').value, bankBIC: $('bankBIC').value, bankHolder: $('bankHolder').value };
+            localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+            renderProfileDropdown();
+            showToast('Profil "' + name + '" gespeichert');
+        }
+        function loadProfile(name) {
+            if (!name) return;
+            const p = getProfiles()[name];
+            if (!p) return;
+            Object.keys(p).forEach(k => { const el = $(k); if (el) el.value = p[k] || ''; });
+            updatePreview();
+            showToast('Profil geladen');
+        }
+        function deleteProfile() {
+            const sel = $('profileSelect');
+            const name = sel.value;
+            if (!name) { alert('Bitte zuerst ein Profil auswählen.'); return; }
+            if (!confirm('Profil "' + name + '" löschen?')) return;
+            const profiles = getProfiles();
+            delete profiles[name];
+            localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+            renderProfileDropdown();
+            showToast('Profil gelöscht');
+        }
+
+        // Address Book
+        function getContacts() { try { return JSON.parse(localStorage.getItem(CONTACTS_KEY)) || {}; } catch { return {}; } }
+        function renderContactDropdown() {
+            const contacts = getContacts();
+            const sel = $('contactSelect');
+            sel.innerHTML = '<option value="">— Kontakt wählen —</option>';
+            Object.keys(contacts).forEach(name => { const o = document.createElement('option'); o.value = name; o.textContent = name; sel.appendChild(o); });
+        }
+        function saveContact() {
+            const name = $('companyName').value.trim() || $('department').value.trim();
+            if (!name) { alert('Bitte zuerst einen Empfänger eingeben.'); return; }
+            const contacts = getContacts();
+            contacts[name] = { companyName: $('companyName').value, department: $('department').value,
+                recipientStreet: $('recipientStreet').value, recipientCity: $('recipientCity').value };
+            localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
+            renderContactDropdown();
+            showToast('Kontakt "' + name + '" gespeichert');
+        }
+        function loadContact(name) {
+            if (!name) return;
+            const c = getContacts()[name];
+            if (!c) return;
+            Object.keys(c).forEach(k => { const el = $(k); if (el) el.value = c[k] || ''; });
+            updatePreview();
+            showToast('Kontakt geladen');
+        }
+        function deleteContact() {
+            const sel = $('contactSelect');
+            const name = sel.value;
+            if (!name) { alert('Bitte zuerst einen Kontakt auswählen.'); return; }
+            if (!confirm('Kontakt "' + name + '" löschen?')) return;
+            const contacts = getContacts();
+            delete contacts[name];
+            localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts));
+            renderContactDropdown();
+            showToast('Kontakt gelöscht');
+        }
+
+        // Templates
+        const TEMPLATES = {
+            kuendigung: { subject: 'Kündigung', greeting: 'Sehr geehrte Damen und Herren,',
+                closingGreeting: 'Mit freundlichen Grüßen',
+                paragraphs: [
+                    { id: '1', value: 'hiermit kündige ich den oben genannten Vertrag fristgerecht zum nächstmöglichen Zeitpunkt.' },
+                    { id: '2', value: 'Bitte bestätigen Sie mir den Eingang dieser Kündigung sowie den Beendigungszeitpunkt schriftlich.' },
+                    { id: '3', value: 'Ich bedanke mich für die bisherige Zusammenarbeit.' }
+                ], attachments: [] },
+            mahnung: { subject: 'Zahlungserinnerung – Rechnung Nr. [NUMMER]', greeting: 'Sehr geehrte Damen und Herren,',
+                closingGreeting: 'Mit freundlichen Grüßen',
+                paragraphs: [
+                    { id: '1', value: 'bei der Überprüfung unserer Buchhaltung haben wir festgestellt, dass die oben genannte Rechnung noch nicht beglichen wurde.' },
+                    { id: '2', value: 'Wir bitten Sie, den offenen Betrag von [BETRAG] € innerhalb von 14 Tagen auf unser unten genanntes Konto zu überweisen.' },
+                    { id: '3', value: 'Sollte sich Ihre Zahlung mit diesem Schreiben gekreuzt haben, betrachten Sie diese Erinnerung bitte als gegenstandslos.' }
+                ], attachments: [{ id: '1', value: 'Kopie der Rechnung' }] },
+            angebot: { subject: 'Angebot', greeting: 'Sehr geehrte Damen und Herren,',
+                closingGreeting: 'Mit freundlichen Grüßen',
+                paragraphs: [
+                    { id: '1', value: 'vielen Dank für Ihre Anfrage. Gerne unterbreiten wir Ihnen folgendes Angebot:' },
+                    { id: '2', value: '[Hier Leistungsbeschreibung und Konditionen einfügen]' },
+                    { id: '3', value: 'Dieses Angebot ist 30 Tage gültig. Für Rückfragen stehen wir Ihnen jederzeit gerne zur Verfügung.' }
+                ], attachments: [{ id: '1', value: 'Detailliertes Angebot' }] },
+            bewerbung: { subject: 'Bewerbung als [POSITION]', greeting: 'Sehr geehrte Damen und Herren,',
+                closingGreeting: 'Mit freundlichen Grüßen',
+                paragraphs: [
+                    { id: '1', value: 'mit großem Interesse habe ich Ihre Stellenausschreibung gelesen und bewerbe mich hiermit um die ausgeschriebene Position.' },
+                    { id: '2', value: '[Hier Qualifikationen und Motivation beschreiben]' },
+                    { id: '3', value: 'Über eine Einladung zu einem persönlichen Gespräch freue ich mich sehr.' }
+                ], attachments: [{ id: '1', value: 'Lebenslauf' }, { id: '2', value: 'Zeugnisse' }] },
+            allgemein: { subject: 'Angebot zur Erneuerung der IT-Infrastruktur', greeting: 'Sehr geehrte Damen und Herren,',
+                closingGreeting: 'Mit freundlichen Grüßen',
+                companyName: 'Tech Corp GmbH', department: 'Einkauf / Beschaffung', recipientStreet: 'Innovationsallee 1', recipientCity: '80331 München',
+                paragraphs: [
+                    { id: '1', value: 'vielen Dank für das freundliche Telefonat von letzter Woche bezüglich der Modernisierung Ihrer bestehenden IT-Infrastruktur.' },
+                    { id: '2', value: 'In der Anlage finden Sie unser detailliertes Angebot für die Migration auf die neuen Cloud-Server, inklusive Hardware und Consulting.' },
+                    { id: '3', value: 'Für Rückfragen stehe ich Ihnen jederzeit gerne zur Verfügung.' }
+                ], attachments: [{ id: '1', value: 'Detailliertes Angebot' }, { id: '2', value: 'Projekt-Timeline' }] }
+        };
+        function loadTemplate(key) {
+            if (!key) return;
+            const t = TEMPLATES[key];
+            if (!t) return;
+            if (t.companyName !== undefined) $('companyName').value = t.companyName || '';
+            if (t.department !== undefined) $('department').value = t.department || '';
+            if (t.recipientStreet !== undefined) $('recipientStreet').value = t.recipientStreet || '';
+            if (t.recipientCity !== undefined) $('recipientCity').value = t.recipientCity || '';
+            $('subject').value = t.subject || '';
+            $('greeting').value = t.greeting || '';
+            $('closingGreeting').value = t.closingGreeting || '';
+            state.paragraphs = (t.paragraphs || []).map(p => ({ ...p, id: generateId() }));
+            state.attachments = (t.attachments || []).map(a => ({ ...a, id: generateId() }));
+            renderDynamicLists();
+            updatePreview();
+            $('templateSelect').value = '';
+            showToast('Vorlage geladen');
+        }
+
+        // Logo
+        function handleLogo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => { state.logoData = e.target.result; updatePreview(); showToast('Logo hochgeladen'); };
+            reader.readAsDataURL(file);
+        }
+        function removeLogo() { state.logoData = null; $('logoUpload').value = ''; updatePreview(); showToast('Logo entfernt'); }
+
+        // Auto Date
+        function setAutoDate() {
+            const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+            const d = new Date();
+            const city = $('senderCity').value.trim();
+            const ort = city ? city.replace(/^\d+\s*/, '') : '';
+            const dateStr = `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+            if (!$('dateLocation').value.trim()) $('dateLocation').value = ort ? `${ort}, ${dateStr}` : dateStr;
+        }
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveToFile(); }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') { e.preventDefault(); window.print(); }
+        });
 
         // 2. Rendering Engine
         const updatePreview = debounce(() => {
-            const getVal = id => escapeHTML(document.getElementById(id).value.trim());
-
-            // Format
             const formatRadio = document.querySelector('input[name="dinFormat"]:checked');
             const currentFormat = formatRadio ? formatRadio.value : 'formB';
-
-            // Absender
-            const sName = getVal('senderName');
-            const sCO = getVal('senderCO');
-            const sStr = getVal('senderStreet');
-            const sCity = getVal('senderCity');
-            const sPhone = getVal('senderPhone');
-            const sEmail = getVal('senderEmail');
-
-            // Empfänger
-            const rComp = getVal('companyName');
-            const rDept = getVal('department');
-            const rStr = getVal('recipientStreet');
-            const rCity = getVal('recipientCity');
+            const sName = getVal('senderName'), sCO = getVal('senderCO'), sStr = getVal('senderStreet');
+            const sCity = getVal('senderCity'), sPhone = getVal('senderPhone'), sEmail = getVal('senderEmail');
+            const rComp = getVal('companyName'), rDept = getVal('department'), rStr = getVal('recipientStreet'), rCity = getVal('recipientCity');
 
             // Rücksendeangabe
             const returnParts = [];
@@ -652,14 +1026,12 @@
             if (sCity) returnParts.push(sCity);
             const returnHtml = returnParts.join(' · ');
 
-            // Anschrift
             let addrHtml = '';
             if (rComp) addrHtml += `<p class="company">${rComp}</p>`;
             if (rDept) addrHtml += `<p>${rDept}</p>`;
             if (rStr) addrHtml += `<p>${rStr}</p>`;
             if (rCity) addrHtml += `<p>${rCity}</p>`;
 
-            // Informationsblock (Rechts)
             let infoHtml = '<div class="info-contact">';
             if (sName) infoHtml += `<p><strong>${sName}</strong></p>`;
             if (sCO) infoHtml += `<p>c/o ${sCO.replace(/^c\/o\s*/i, '')}</p>`;
@@ -670,38 +1042,95 @@
             if (sEmail) infoHtml += `<p>${sEmail}</p>`;
             if (sPhone || sEmail) infoHtml += `</div>`;
             infoHtml += '</div>';
+            const dateLoc = getVal('dateLocation');
+            if (dateLoc) infoHtml += `<div class="info-date">${dateLoc}</div>`;
 
-            const dateStr = getVal('dateLocation');
-            if (dateStr) infoHtml += `<div class="info-date">${dateStr}</div>`;
+            // Reference line
+            const refYS = getVal('refYourSign'), refOS = getVal('refOurSign'), refYD = getVal('refYourDate'), refD = getVal('refDate');
+            const hasRef = refYS || refOS || refYD; // refD alone is redundant – date already in info block
 
-            // Reset Wrapper
-            const wrapper = document.getElementById('preview-wrapper');
+            // Footer
+            const fCEO = getVal('footerCEO'), fLegal = getVal('footerLegal'), fCourt = getVal('footerCourt');
+            const fHRB = getVal('footerHRB'), fVAT = getVal('footerVAT'), fTax = getVal('footerTax');
+            const bName = getVal('bankName'), bIBAN = getVal('bankIBAN'), bBIC = getVal('bankBIC'), bHolder = getVal('bankHolder');
+            const hasFooter = fCEO || fLegal || fCourt || fHRB || fVAT || fTax || bName || bIBAN;
+            let footerHtml = '';
+            if (hasFooter) {
+                footerHtml = '<div class="page-footer"><div class="footer-col">';
+                if (sName) footerHtml += `<p><strong>${sName}</strong></p>`;
+                if (fLegal) footerHtml += `<p>${fLegal}</p>`;
+                if (sStr) footerHtml += `<p>${sStr}</p>`;
+                if (sCity) footerHtml += `<p>${sCity}</p>`;
+                footerHtml += '</div><div class="footer-col">';
+                if (fCEO) footerHtml += `<p>GF: ${fCEO}</p>`;
+                if (fCourt) footerHtml += `<p>${fCourt}</p>`;
+                if (fHRB) footerHtml += `<p>${fHRB}</p>`;
+                if (fVAT) footerHtml += `<p>USt-IdNr: ${fVAT}</p>`;
+                if (fTax) footerHtml += `<p>St-Nr: ${fTax}</p>`;
+                footerHtml += '</div><div class="footer-col">';
+                if (bName) footerHtml += `<p>${bName}</p>`;
+                if (bIBAN) footerHtml += `<p>IBAN: ${bIBAN}</p>`;
+                if (bBIC) footerHtml += `<p>BIC: ${bBIC}</p>`;
+                if (bHolder) footerHtml += `<p>Kto: ${bHolder}</p>`;
+                footerHtml += '</div></div>';
+            }
+            const contentBottomBase = hasFooter ? '28mm' : '20mm';
+            let measuredFooterPx = null; // measured after first page is in DOM
+
+            // Logo
+            const logoHtml = state.logoData ? `<img class="letter-logo" src="${state.logoData}">` : '';
+
+            const wrapper = $('preview-wrapper');
             wrapper.innerHTML = '';
-
             let pageNum = 1;
+
+            function getBottomVal() {
+                if (!hasFooter) return '20mm';
+                return measuredFooterPx !== null ? measuredFooterPx + 'px' : contentBottomBase;
+            }
 
             function createNewPage() {
                 const page = document.createElement('div');
                 page.className = 'a4-page';
                 page.setAttribute('data-format', currentFormat);
-
                 if (pageNum === 1) {
+                    let refHtml = '';
+                    if (hasRef) {
+                        refHtml = '<div class="reference-line">';
+                        if (refYS) refHtml += `<div class="ref-item"><label>Ihr Zeichen</label><span>${refYS}</span></div>`;
+                        if (refYD) refHtml += `<div class="ref-item"><label>Ihr Schreiben vom</label><span>${refYD}</span></div>`;
+                        if (refOS) refHtml += `<div class="ref-item"><label>Unser Zeichen</label><span>${refOS}</span></div>`;
+                        if (refD) refHtml += `<div class="ref-item"><label>Datum</label><span>${refD}</span></div>`;
+                        refHtml += '</div>';
+                    }
                     page.innerHTML = `
+                        ${logoHtml}
                         <div class="mark mark-fold-1"></div>
                         <div class="mark mark-hole"></div>
                         <div class="mark mark-fold-2"></div>
                         <div class="window-return">${returnHtml}</div>
                         <div class="window-address">${addrHtml}</div>
                         <div class="info-block">${infoHtml}</div>
-                        <div class="letter-content" style="overflow: hidden;"></div>
-                    `;
+                        <div class="letter-content" style="overflow:hidden;bottom:${getBottomVal()};">${refHtml}</div>
+                        ${footerHtml}`;
                 } else {
                     page.innerHTML = `
-                        <div class="page-indicator" style="position: absolute; top: 20mm; right: 20mm; font-size: 11pt;" data-page="${pageNum}"></div>
-                        <div class="letter-content" style="top: 35mm; overflow: hidden;"></div>
-                    `;
+                        <div class="page-indicator" style="position:absolute;top:20mm;right:20mm;font-size:11pt;" data-page="${pageNum}"></div>
+                        <div class="letter-content" style="top:35mm;overflow:hidden;bottom:${getBottomVal()};"></div>
+                        ${footerHtml}`;
                 }
                 wrapper.appendChild(page);
+                // After first page hits DOM: measure actual footer height, then fix content area
+                if (hasFooter && measuredFooterPx === null) {
+                    const fEl = page.querySelector('.page-footer');
+                    if (fEl) {
+                        // footer rendered height in mm + its CSS bottom:5mm + 3mm safety
+                        const reservedMm = fEl.offsetHeight * (25.4 / 96) + 5 + 3;
+                        measuredFooterPx = Math.ceil(reservedMm * (96 / 25.4));
+                        const cEl = page.querySelector('.letter-content');
+                        if (cEl) cEl.style.bottom = measuredFooterPx + 'px';
+                    }
+                }
                 return page.querySelector('.letter-content');
             }
 
@@ -709,7 +1138,6 @@
 
             function appendWithPagination(element) {
                 contentArea.appendChild(element);
-                // We use +1 tolerance for potential sub-pixel rounding
                 if (contentArea.scrollHeight > contentArea.clientHeight + 1) {
                     contentArea.removeChild(element);
                     pageNum++;
@@ -738,17 +1166,16 @@
 
             // Textkörper
             state.paragraphs.forEach(p => {
-                const inputEl = document.getElementById(`para_${p.id}`);
+                const inputEl = $(`para_${p.id}`);
                 const text = inputEl ? inputEl.value.trim() : '';
-                const indentEl = document.getElementById(`indent_${p.id}`);
+                const indentEl = $(`indent_${p.id}`);
                 const indentLevel = indentEl ? parseInt(indentEl.value || '0', 10) : 0;
-                
+
                 if (text) {
                     const pEl = document.createElement('div');
                     pEl.className = 'body-text';
-                    // DIN 5008 typische Einrückung: 12.5mm pro Stufe
                     const indentStyle = indentLevel > 0 ? ` style="margin-left: ${indentLevel * 12.5}mm;"` : '';
-                    pEl.innerHTML = `<p${indentStyle}>${escapeHTML(text)}</p>`;
+                    pEl.innerHTML = `<p${indentStyle}>${parseRichText(text)}</p>`;
                     appendWithPagination(pEl);
                 }
             });
@@ -790,53 +1217,85 @@
             saveToMemory();
         }, 150);
 
-        // 3. State Management (DOM sync)
+        // 3. State Management
         function init() {
-            // Bind input listeners
-            document.getElementById('letterForm').addEventListener('input', updatePreview);
-
+            initDarkMode();
+            renderProfileDropdown();
+            renderContactDropdown();
+            $('letterForm').addEventListener('input', updatePreview);
+            // Listen for format radio changes
+            document.querySelectorAll('input[name="dinFormat"]').forEach(r => r.addEventListener('change', updatePreview));
             if (!loadAutoSave()) {
                 addParagraph();
+                setAutoDate();
             }
-        }
-
-        function generateId() {
-            return Math.random().toString(36).substr(2, 9);
         }
 
         function addParagraph() {
             state.paragraphs.push({ id: generateId() });
             renderDynamicLists();
         }
-
         function removeParagraph(id) {
             state.paragraphs = state.paragraphs.filter(p => p.id !== id);
             renderDynamicLists();
             updatePreview();
         }
-
         function addAttachment() {
             state.attachments.push({ id: generateId() });
             renderDynamicLists();
         }
-
         function removeAttachment(id) {
             state.attachments = state.attachments.filter(a => a.id !== id);
             renderDynamicLists();
             updatePreview();
         }
 
+        // Drag & Drop
+        let dragSrcId = null;
+        function handleDragStart(e) {
+            dragSrcId = e.currentTarget.getAttribute('data-id');
+            e.currentTarget.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            e.currentTarget.classList.add('drag-over');
+        }
+        function handleDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            const targetId = e.currentTarget.getAttribute('data-id');
+            if (dragSrcId && targetId && dragSrcId !== targetId) {
+                // Sync values before reorder
+                state.paragraphs.forEach(p => {
+                    const el = $(`para_${p.id}`);
+                    if (el) p.value = el.value;
+                    const ind = $(`indent_${p.id}`);
+                    if (ind) p.indent = parseInt(ind.value || '0', 10);
+                });
+                const srcIdx = state.paragraphs.findIndex(p => p.id === dragSrcId);
+                const tgtIdx = state.paragraphs.findIndex(p => p.id === targetId);
+                const [moved] = state.paragraphs.splice(srcIdx, 1);
+                state.paragraphs.splice(tgtIdx, 0, moved);
+                renderDynamicLists();
+                updatePreview();
+            }
+        }
+        function handleDragEnd(e) { e.currentTarget.classList.remove('dragging'); }
+
         function renderDynamicLists() {
-            // Paragraphs
-            const pCont = document.getElementById('paragraphsContainer');
+            const pCont = $('paragraphsContainer');
             pCont.innerHTML = state.paragraphs.map((p, idx) => {
                 const ind = p.indent || 0;
                 return `
-                <div class="paragraph-item">
+                <div class="paragraph-item" draggable="true" data-id="${p.id}">
                     <div class="flex-between">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <span style="font-size:12px; font-weight:bold; color:#666">Absatz ${idx + 1}</span>
-                            <select id="indent_${p.id}" style="padding: 2px 5px; font-size: 12px; border-radius: 4px; border: 1px solid var(--border);">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span class="drag-handle">⠿</span>
+                            <span style="font-size:12px;font-weight:bold;color:#666">Absatz ${idx + 1}</span>
+                            <select id="indent_${p.id}" style="padding:2px 5px;font-size:12px;border-radius:4px;border:1px solid var(--border);">
                                 <option value="0" ${ind === 0 ? 'selected' : ''}>Standard</option>
                                 <option value="1" ${ind === 1 ? 'selected' : ''}>Einrückung 1</option>
                                 <option value="2" ${ind === 2 ? 'selected' : ''}>Einrückung 2</option>
@@ -844,109 +1303,81 @@
                         </div>
                         <button type="button" class="btn-danger" onclick="removeParagraph('${p.id}')">Entfernen</button>
                     </div>
-                    <textarea id="para_${p.id}" placeholder="Text...">${escapeHTML(p.value || '')}</textarea>
-                </div>
-                `;
+                    <textarea id="para_${p.id}" placeholder="Text... (**fett**, *kursiv*)">${escapeHTML(p.value || '')}</textarea>
+                </div>`;
             }).join('');
 
-            // Anlagen
-            const aCont = document.getElementById('attachmentsContainer');
-            aCont.innerHTML = state.attachments.map((a, idx) => `
-                <div class="flex-between" style="gap:10px; margin-bottom:10px;">
+            const aCont = $('attachmentsContainer');
+            aCont.innerHTML = state.attachments.map(a => `
+                <div class="flex-between" style="gap:10px;margin-bottom:10px;">
                     <input type="text" id="att_${a.id}" placeholder="Dokumentname..." value="${escapeHTML(a.value || '')}">
                     <button type="button" class="btn-danger" onclick="removeAttachment('${a.id}')">🗑️</button>
-                </div>
-            `).join('');
+                </div>`).join('');
 
-            // Restore actual values into DOM properties to persist through innerHTML rewrites
-            state.paragraphs.forEach(p => { const el = document.getElementById(`para_${p.id}`); if (el && p.value) el.value = p.value; });
-            state.attachments.forEach(a => { const el = document.getElementById(`att_${a.id}`); if (el && a.value) el.value = a.value; });
+            // Restore values & bind listeners
+            state.paragraphs.forEach(p => { const el = $(`para_${p.id}`); if (el && p.value) el.value = p.value; });
+            state.attachments.forEach(a => { const el = $(`att_${a.id}`); if (el && a.value) el.value = a.value; });
 
-            // Re-bind specific inputs
             document.querySelectorAll('#paragraphsContainer textarea, #paragraphsContainer select, #attachmentsContainer input').forEach(el => {
-                el.addEventListener('input', (e) => {
-                    const idParts = e.target.id.split('_');
-                    if (idParts[0] === 'para') {
-                        const item = state.paragraphs.find(x => x.id === idParts[1]);
-                        if (item) item.value = e.target.value;
-                    } else if (idParts[0] === 'indent') {
-                        const item = state.paragraphs.find(x => x.id === idParts[1]);
-                        if (item) item.indent = parseInt(e.target.value, 10);
-                    } else if (idParts[0] === 'att') {
-                        const item = state.attachments.find(x => x.id === idParts[1]);
-                        if (item) item.value = e.target.value;
-                    }
+                el.addEventListener('input', e => {
+                    const [prefix, id] = e.target.id.split('_');
+                    if (prefix === 'para') { const item = state.paragraphs.find(x => x.id === id); if (item) item.value = e.target.value; }
+                    else if (prefix === 'indent') { const item = state.paragraphs.find(x => x.id === id); if (item) item.indent = parseInt(e.target.value, 10); }
+                    else if (prefix === 'att') { const item = state.attachments.find(x => x.id === id); if (item) item.value = e.target.value; }
                     updatePreview();
                 });
+            });
+
+            // Bind drag & drop
+            document.querySelectorAll('.paragraph-item[draggable]').forEach(el => {
+                el.addEventListener('dragstart', handleDragStart);
+                el.addEventListener('dragover', handleDragOver);
+                el.addEventListener('dragleave', handleDragLeave);
+                el.addEventListener('drop', handleDrop);
+                el.addEventListener('dragend', handleDragEnd);
             });
         }
 
         // 4. Data IO
+        const ALL_FIELD_IDS = ['senderName','senderCO','senderStreet','senderCity','senderPhone','senderEmail',
+            'companyName','department','recipientStreet','recipientCity',
+            'refYourSign','refOurSign','refYourDate','refDate',
+            'dateLocation','subject','greeting','closingGreeting',
+            'footerCEO','footerLegal','footerCourt','footerHRB','footerVAT','footerTax',
+            'bankName','bankIBAN','bankBIC','bankHolder'];
+
         function collectData() {
-            return {
-                senderName: document.getElementById('senderName').value,
-                senderCO: document.getElementById('senderCO').value,
-                senderStreet: document.getElementById('senderStreet').value,
-                senderCity: document.getElementById('senderCity').value,
-                senderPhone: document.getElementById('senderPhone').value,
-                senderEmail: document.getElementById('senderEmail').value,
-                companyName: document.getElementById('companyName').value,
-                department: document.getElementById('department').value,
-                recipientStreet: document.getElementById('recipientStreet').value,
-                recipientCity: document.getElementById('recipientCity').value,
-                dateLocation: document.getElementById('dateLocation').value,
-                subject: document.getElementById('subject').value,
-                greeting: document.getElementById('greeting').value,
-                closingGreeting: document.getElementById('closingGreeting').value,
-                dinFormat: document.querySelector('input[name="dinFormat"]:checked') ? document.querySelector('input[name="dinFormat"]:checked').value : 'formB',
-                paragraphs: state.paragraphs.map(p => ({ 
-                    id: p.id, 
-                    value: document.getElementById(`para_${p.id}`)?.value || '',
-                    indent: parseInt(document.getElementById(`indent_${p.id}`)?.value || '0', 10)
-                })),
-                attachments: state.attachments.map(a => ({ id: a.id, value: document.getElementById(`att_${a.id}`)?.value || '' }))
-            };
+            const data = {};
+            ALL_FIELD_IDS.forEach(id => { data[id] = $(id).value; });
+            data.dinFormat = document.querySelector('input[name="dinFormat"]:checked')?.value || 'formB';
+            data.paragraphs = state.paragraphs.map(p => ({
+                id: p.id,
+                value: $(`para_${p.id}`)?.value || '',
+                indent: parseInt($(`indent_${p.id}`)?.value || '0', 10)
+            }));
+            data.attachments = state.attachments.map(a => ({ id: a.id, value: $(`att_${a.id}`)?.value || '' }));
+            data.logoData = state.logoData || null;
+            return data;
         }
 
         function restoreData(data) {
-            const ids = ['senderName', 'senderCO', 'senderStreet', 'senderCity', 'senderPhone', 'senderEmail',
-                'companyName', 'department', 'recipientStreet', 'recipientCity',
-                'dateLocation', 'subject', 'greeting', 'closingGreeting'];
-
-            ids.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && data[id] !== undefined) el.value = data[id];
-            });
-
-            if (data.dinFormat) {
-                const radio = document.querySelector(`input[name="dinFormat"][value="${data.dinFormat}"]`);
-                if (radio) radio.checked = true;
-            } else {
-                const radio = document.querySelector(`input[name="dinFormat"][value="formB"]`);
-                if (radio) radio.checked = true;
-            }
-
+            ALL_FIELD_IDS.forEach(id => { const el = $(id); if (el && data[id] !== undefined) el.value = data[id]; });
+            const fmt = data.dinFormat || 'formB';
+            const radio = document.querySelector(`input[name="dinFormat"][value="${fmt}"]`);
+            if (radio) radio.checked = true;
             state.paragraphs = Array.isArray(data.paragraphs) ? data.paragraphs : [];
             state.attachments = Array.isArray(data.attachments) ? data.attachments : [];
-
+            state.logoData = data.logoData || null;
             if (state.paragraphs.length === 0) addParagraph();
             else renderDynamicLists();
-
             updatePreview();
         }
 
-        function saveToMemory() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
-        }
+        function saveToMemory() { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData())); }
 
         function loadAutoSave() {
             const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try {
-                    restoreData(JSON.parse(saved));
-                    return true;
-                } catch (e) { }
-            }
+            if (saved) { try { restoreData(JSON.parse(saved)); return true; } catch(e) {} }
             return false;
         }
 
@@ -954,14 +1385,17 @@
             restoreData({
                 senderName: "Max Mustermann", senderStreet: "Musterstraße 123", senderCity: "10115 Berlin",
                 senderPhone: "030 1234567", senderEmail: "max@example.com",
-                companyName: "Tech Corp GmbH", department: "Einkauf / Beschaffung", recipientStreet: "Innovationsallee 1", recipientCity: "80331 München",
+                companyName: "Tech Corp GmbH", department: "Einkauf / Beschaffung",
+                recipientStreet: "Innovationsallee 1", recipientCity: "80331 München",
                 dateLocation: "Berlin, 15. März 2026", subject: "Angebot zur Erneuerung der IT-Infrastruktur",
-                greeting: "Sehr geehrte Damen und Herren,",
-                closingGreeting: "Mit freundlichen Grüßen",
+                greeting: "Sehr geehrte Damen und Herren,", closingGreeting: "Mit freundlichen Grüßen",
+                footerCEO: "Max Mustermann", footerLegal: "Mustermann IT GmbH", footerCourt: "AG Berlin",
+                footerHRB: "HRB 123456", footerVAT: "DE123456789",
+                bankName: "Deutsche Bank", bankIBAN: "DE89 3704 0044 0532 0130 00", bankBIC: "COBADEFFXXX", bankHolder: "Max Mustermann",
                 paragraphs: [
                     { id: "1", value: "vielen Dank für das freundliche Telefonat von letzter Woche bezüglich der Modernisierung Ihrer bestehenden IT-Infrastruktur." },
-                    { id: "2", value: "In der Anlage finden Sie unser detailliertes Angebot für die Migration auf die neuen Cloud-Server, inklusive Hardware und Consulting. Wir haben dabei besonderen Wert auf hohe Ausfallsicherheit und DSGVO-Konformität gelegt." },
-                    { id: "3", value: "Für Rückfragen stehe ich Ihnen jederzeit gerne zur Verfügung. Ich freue mich darauf, dieses Projekt gemeinsam mit Ihnen umzusetzen." }
+                    { id: "2", value: "In der Anlage finden Sie unser **detailliertes Angebot** für die Migration auf die neuen Cloud-Server, inklusive *Hardware* und *Consulting*." },
+                    { id: "3", value: "Für Rückfragen stehe ich Ihnen jederzeit gerne zur Verfügung." }
                 ],
                 attachments: [{ id: "1", value: "Detailliertes Angebot" }, { id: "2", value: "Projekt-Timeline" }]
             });
@@ -971,10 +1405,12 @@
         function clearAll() {
             if (confirm("Alle Eingaben löschen?")) {
                 localStorage.removeItem(STORAGE_KEY);
-                document.getElementById('letterForm').reset();
+                $('letterForm').reset();
                 state.paragraphs = [];
                 state.attachments = [];
+                state.logoData = null;
                 addParagraph();
+                setAutoDate();
                 updatePreview();
                 showToast("Formular zurückgesetzt");
             }
@@ -987,7 +1423,7 @@
             link.href = URL.createObjectURL(blob);
             link.download = `brief_${new Date().toISOString().split('T')[0]}.json`;
             link.click();
-            showToast("Datei gespeichert");
+            showToast("Datei gespeichert (Ctrl+S)");
         }
 
         function loadFromFile(event) {
@@ -995,20 +1431,16 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = e => {
-                try {
-                    restoreData(JSON.parse(e.target.result));
-                    showToast("Dokument geladen");
-                } catch (err) {
-                    alert("Fehlerhafte Datei.");
-                }
+                try { restoreData(JSON.parse(e.target.result)); showToast("Dokument geladen"); }
+                catch (err) { alert("Fehlerhafte Datei."); }
             };
             reader.readAsText(file);
-            event.target.value = ''; // reset input
+            event.target.value = '';
         }
 
         let toastTimeout;
         function showToast(msg) {
-            const el = document.getElementById('toast');
+            const el = $('toast');
             el.textContent = msg;
             el.classList.add('show');
             clearTimeout(toastTimeout);
